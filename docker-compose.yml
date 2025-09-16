@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: products_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: products_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build: .
+    container_name: products_api
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://admin:password@postgres:5432/products_db
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+
+
+
